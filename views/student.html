@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+  <style>
+    table.table thead tr th,
+    table.table tbody tr td {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container-fluid bg-light">
+    <h2>Table Student</h2>
+    <p>CRUD data Studen</p>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>NAME</th>
+          <th>AGE</th>
+          <th>CLASS</th>
+          <th>INFO</th>
+          <th>UPDATE</th>
+          <th>DELETE</th>
+        </tr>
+      </thead>
+      <tbody id="body-table">
+
+      </tbody>
+    </table>
+  </div>
+  <div class="modal fade" id="form-update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form action="/students-update-one" method="post" class="class=" form-group"">
+          <div class="modal-header">
+            <h5 class="modal-title">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="method" value="UPDATE" />
+            <input type="hidden" name="idStudent" value="" />
+            <div class="form-group">
+              <label for="nameStudent">Name Student: </label>
+              <input id="nameStudent" type="text" name="name" value="" class="form-control" placeholder="enter name" />
+            </div>
+            <div class="form-group">
+              <label for="ageStudent">Age Student: </label>
+              <input id="ageStudent" type="number" name="age" value="" class="form-control" placeholder="enter age"/>
+            </div>
+            <div class="form-group">
+              <label for="classStudent">Class Student: </label>
+              <input id="classStudent" type="text" name="class" value="" class="form-control" placeholder="enter class" />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Update</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="form-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+
+        <form action="/students-delete-one" method="post">
+          <div class="modal-header">
+            <h5 class="modal-title">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-footer">
+            <input type="hidden" name="method" value="DELETE" />
+            <input type="hidden" name="idStudent" value="" />
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Delete</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var txt = "";
+
+      function myFunction(value, index, array) {
+        txt = txt + `<tr><td>${value.id}</td><td>${value.name}</td><td>${value.age}</td><td>${value.class}</td>
+      <td>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+          <i style='font-size:24px' class='fas'>&#xf039;</i>
+        </button>
+      </td>
+      <td>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#form-update">
+        <i style='font-size:24px' class='fas'>&#xf044;</i>
+      </button>
+      </td>
+      <td>
+      <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#form-delete">
+        <i style='font-size:24px' class='fas'>&#xf1f8;</i>
+      </button>
+      </td>
+      </tr>
+      `
+      }
+      var indexStudent;
+      $.get("/students-db", function(data, status) {
+        data.forEach(myFunction);
+        document.getElementById("body-table").innerHTML = txt;
+        $("tr").click(function() {
+          indexStudent = $(this).children('td').html()
+        });
+      });
+
+
+      $('#form-delete').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var recipient = button.data('whatever') // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('.modal-title').text('DELETE ID STUDENT: ' + indexStudent)
+        modal.find('.modal-footer input[name="idStudent"]').val(indexStudent)
+      })
+      $('#form-update').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var recipient = button.data('whatever') // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('.modal-title').text('UPDATE ID STUDENT: ' + indexStudent)
+        var txtJson;
+        $.get("/students/" + indexStudent, function(data, status) {
+          modal.find('.modal-body input[name="idStudent"]').val(data.id)
+          modal.find('.modal-body input[name="name"]').val(data.name)
+          modal.find('.modal-body input[name="age"]').val(data.age)
+          modal.find('.modal-body input[name="class"]').val(data.class)
+        });
+      })
+    });
+  </script>
+</body>
+
+</html>

@@ -1,13 +1,12 @@
-var fs = require('fs')
-var path = require('path')
+const fs = require('fs')
+const path = require('path')
 
-var filePath = path.join(__dirname, '../assets/file/file.txt');
-exports.readFile = (response) => {
-  fs.readFile(filePath, {
+const filePathNotFound = path.join(__dirname, '../views/not_found.html');
+exports.viewNotFound = (response) => {
+  fs.readFile(filePathNotFound, {
     encoding: 'utf-8'
   },(err, data) => {
     if (!err) {
-      console.log('received data: ' + data);
       response.writeHead(200, {
         'Content-Type': 'text/html'
       });
