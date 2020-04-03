@@ -17,6 +17,11 @@ exports.apiRoute = (request, response) => {
       cb.getDataOneStudent(request, response)
     }
     break
+    case url == "/students-add-one":
+    if (method === "POST") {
+      cb.addOneStudent(request, response)
+    }
+    break
     case url == "/students-update-one":
     if (method === "POST") {
       cb.updateOneStudents(request, response)

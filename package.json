@@ -1,0 +1,24 @@
+{
+  "name": "crud-node",
+  "version": "1.0.0",
+  "description": "create rest api and crud in nodejs without any framework",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PhuongDongIOT/CRUD-NODE.git"
+  },
+  "keywords": [
+    "CRUD"
+  ],
+  "author": "dongpp",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PhuongDongIOT/CRUD-NODE/issues"
+  },
+  "homepage": "https://github.com/PhuongDongIOT/CRUD-NODE#readme"
+}
