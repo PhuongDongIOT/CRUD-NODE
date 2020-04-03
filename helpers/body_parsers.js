@@ -10,7 +10,7 @@ exports.bodyParser = async (request) => {
         totalChunked += chunk
       })
       .on("end", () => {
-        request.body = JSON.parse(totalChunked)
+        request.body = totalChunked
         resolve()
       })
   })

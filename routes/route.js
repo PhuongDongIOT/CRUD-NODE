@@ -1,44 +1,39 @@
-const cb = require('../controllers/post')
-const cpf = require('../controllers/file')
-const cv = require('../controllers/view')
-const cnf = require('../controllers/notFound')
+const cb = require('../controllers/student')
+const cnf = require('../controllers/not_found')
 
-exports.apiRoute = (request, response, db) => {
+exports.apiRoute = (request, response) => {
   let url = request.url
   let method = request.method
+  const urlR = /^\/(students){1}\/[0-9]{1,3}/i;
   console.log(method, url)
-  switch (method) {
-    case "POST":
-      if (url === "/post") {
-        cb.postHandler(request, response, db)
-      }
-      break
-
-    case "GET":
-      switch (true) {
-        case url === "/post":
-          cb.getPosts(request, response, db)
-          break;
-        case url === "/read-file":
-          cpf.readFile(response)
-          break;
-        case url === "/view":
-          cv.viewHTML(request, response)
-          break;
-          // default:
-
-      }
-      break
-
-    case "PUT":
-      cb.putPosts(request, response, db)
-      break
-
-    case "DELETE":
-      cb.deletePost(request, response, db)
-      break
+  switch (true) {
+    case url == "/students":
+    if (method === "GET") {
+      cb.getViewStudents(response)
+    }
+    break
+    case urlR.test(url):
+    if (method === "GET") {
+      cb.getDataOneStudent(request, response)
+    }
+    break
+    case url == "/students-update-one":
+    if (method === "POST") {
+      cb.updateOneStudents(request, response)
+    }
+    break
+    case url == "/students-delete-one":
+    if (method === "POST") {
+      cb.deleteOneStudents(request, response)
+    }
+    break
+    case url == "/students-db":
+    if (method === "GET") {
+      cb.getDataStudents(response)
+    }
+    break
 
     default:
-      cnf.notFound(response)
+      cnf.viewNotFound(response)
   }
 }
